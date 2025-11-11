@@ -8,8 +8,15 @@ interface SegmentedControlProps<T extends string> {
 }
 
 export const SegmentedControl = <T extends string>({ name, options, value, onChange }: SegmentedControlProps<T>) => {
+  const gridCols: { [key: number]: string } = {
+    2: 'grid-cols-2',
+    3: 'grid-cols-3',
+    4: 'grid-cols-4',
+  };
+  const gridClass = gridCols[options.length] || 'grid-cols-4';
+
   return (
-    <div className="grid grid-cols-4 gap-2 bg-slate-800/50 p-1 rounded-lg">
+    <div className={`grid ${gridClass} gap-2 bg-slate-800/50 p-1 rounded-lg`}>
       {options.map((option) => (
         <label
           key={option}

@@ -8,10 +8,7 @@ export const enhanceImage = async (
   mimeType: string,
   settings: EnhancementSettings
 ): Promise<string> => {
-    if (!process.env.API_KEY) {
-        throw new Error("API_KEY environment variable not set");
-    }
-
+    // Initialize the GoogleGenAI client just before the API call to ensure the latest API key is used.
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const prompt = `Act as an AI Image Enhancement System. Your mission is to transform this image into a bright, clear, and realistic high-quality visual.
@@ -58,9 +55,7 @@ export const enhanceImage = async (
 
     } catch (error) {
         console.error("Error calling Gemini API:", error);
-        if (error instanceof Error && error.message.includes('xhr error')) {
-            throw new Error("API Connection Error: This often indicates an issue with the API key. Please ensure it is valid, enabled, and has the correct permissions.");
-        }
-        throw new Error("Failed to enhance image due to an API error.");
+        // Re-throw the error to be handled by the calling component
+        throw error;
     }
 };
